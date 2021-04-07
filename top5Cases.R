@@ -91,5 +91,5 @@ library(viridis)
 #See some color options here
 #https://www.r-graph-gallery.com/ggplot2-color.html
 
-ggplot(top5Casesgrouped, aes(x = Date, y=newCases, colour = prefectureNameE)) + geom_point(size=.1)+ geom_smooth(aes(group = prefectureNameE),span = 0.2) +labs(title = "Japan 5 Cities", x = "", y = "New cases",subtitle = "7-day smoothing")+ylim(0,1800) +scale_color_manual(values=c("black","brown2","#69b3a2", "purple", "blue1"))
+ggplot(top5Casesgrouped, aes(x = Date, y=newCases, colour = prefectureNameE)) + geom_point(size=.1)+ geom_smooth(aes(group = prefectureNameE),span = 0.2) +labs(title = "Japan Cities", x = "", y = "New cases",subtitle = "smoothed trend")+ylim(0,1800) +scale_color_manual(values=c("#69b3a2", "blue1", "brown2","black", "purple"))
   #scale_color_brewer(palette = "Paired") #scale_color_viridis(discrete=TRUE, option="plasma")
