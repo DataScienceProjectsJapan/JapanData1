@@ -19,6 +19,8 @@ str(totalPos)
 totalPos$Posi
 #|prefectureNameE=="Osaka"|prefectureNameE=="Fukuoka"|prefectureNameE=="Hokaido"
 TokyoCases <- prefectures  %>% filter(prefectureNameE=="Tokyo")%>% select("testedPositive", "year","month","date")  
+#Filtering with multiple values
+#https://blog.exploratory.io/filter-data-with-dplyr-76cf5f1a258e
 top5=c("Tokyo","Osaka","Fukuoka","Sendai","Hokkaido")
 top5Cases <- prefectures%>%group_by(prefectureNameE)   %>%  filter(prefectureNameE %in% top5)%>%ungroup() %>% select("prefectureNameE","testedPositive", "year","month","date") 
 glimpse(top5Cases)
