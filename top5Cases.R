@@ -1,14 +1,16 @@
 #library(usethis) 
 #use_git_config(user.name = "DataScienceProjectsJapan", user.email = "wclaster@apu.ac.jp")
-
+#install.packages("anytime)
 
 library(tidyverse)
 library(ggplot2)
 library(RcppRoll)
+library(anytime)
 
 library(readr)
-prefectures <- read_csv("prefectures.csv")
-
+#prefectures <- read_csv("prefectures.csv")
+prefectures <- read.csv(url("https://toyokeizai.net/sp/visual/tko/covid19/csv/prefectures.csv"))
+#View(prefectures)
 #Data from
 #https://toyokeizai.net/sp/visual/tko/covid19/
 totalPos <- prefectures %>% group_by(prefectureNameE) %>% summarise(Posi=sum(testedPositive)) %>% arrange(desc(Posi))
@@ -82,14 +84,27 @@ TokyoCases <- TokyoCases%>%mutate(moving_average = roll_mean(TokyoCasesDaily, 7,
 
 ggplot(TokyoCases, aes(x = Date, y=TokyoCasesDaily)) +geom_line(aes(),size=1)+geom_line(data = TokyoCases, aes(Date, moving_average), color="orange",size=2) +labs(title = "Tokyo daily new cases", x = "", y = "New cases",subtitle = "From Feb. 2020") +scale_x_date(date_breaks = "2 month", date_labels =  "%b %Y")
 
-View(TokyoCases)
-
+#View(TokyoCases)
+#View(top5Casesgrouped)
 
 ggplot(TokyoCases, aes(x = Date, y=TokyoCasesDaily)) + geom_point() + geom_smooth(span = 0.2)+labs(title = "Tokyo daily new cases", x = "", y = "New cases",subtitle = "7-day smoothing in blue")
-
+library(forecast)
 library(viridis)
 #See some color options here
 #https://www.r-graph-gallery.com/ggplot2-color.html
-
+#+geom_forecast()
 ggplot(top5Casesgrouped, aes(x = Date, y=newCases, colour = prefectureNameE)) + geom_point(size=.1)+ geom_smooth(aes(group = prefectureNameE),span = 0.2) +labs(title = "Japan Cities", x = "", y = "New cases",subtitle = "smoothed trend")+ylim(0,1800) +scale_color_manual(values=c("#69b3a2", "blue1", "brown2","black", "purple"))
   #scale_color_brewer(palette = "Paired") #scale_color_viridis(discrete=TRUE, option="plasma")
+library(ts)
+t <- as.ts(top5Casesgrouped)
+
+oNew <- top5Casesgrouped %>% filter(prefectureNameE=="Osaka")
+
+oNewCases <- oNew %>% select(newCases)
+t <- as.ts(oNewCases$newCases)
+autoplot(t)
+ft <- forecast(t)
+autoplot(ft)
+
+Jdata$Date <- anytime::anydate(Jdata$Date)
+ggplot(Jdata, aes(x = Date, y=newDeaths)) + geom_point() + geom_smooth(span = 0.2)+labs(title = "Japan daily new deaths", x = "", y = "New deaths",subtitle = "7-day smoothing in blue")
