@@ -93,7 +93,8 @@ library(viridis)
 #See some color options here
 #https://www.r-graph-gallery.com/ggplot2-color.html
 #+geom_forecast()
-ggplot(top5Casesgrouped, aes(x = Date, y=newCases, colour = prefectureNameE)) + geom_point(size=.1)+ geom_smooth(aes(group = prefectureNameE),span = 0.2) +labs(title = "Japan Cities", x = "", y = "New cases",subtitle = "smoothed trend")+ylim(0,1800) +scale_color_manual(values=c("#69b3a2", "blue1", "brown2","black", "purple"))
+shape=c(19,25)
+ggplot(top5Casesgrouped, aes(x = Date, y=newCases, colour = prefectureNameE, shape=testedPositive<15000)) + geom_point(size=.1)+ geom_smooth(aes(group = prefectureNameE),span = 0.2) +labs(title = "Japan Cities", x = "", y = "New cases",subtitle = "smoothed trend")+ylim(0,2500) +scale_color_manual(values=c("#69b3a2", "blue1", "brown2","black", "purple"))
   #scale_color_brewer(palette = "Paired") #scale_color_viridis(discrete=TRUE, option="plasma")
 library(ts)
 t <- as.ts(top5Casesgrouped)
@@ -108,3 +109,4 @@ autoplot(ft)
 
 Jdata$Date <- anytime::anydate(Jdata$Date)
 ggplot(Jdata, aes(x = Date, y=newDeaths)) + geom_point() + geom_smooth(span = 0.2)+labs(title = "Japan daily new deaths", x = "", y = "New deaths",subtitle = "7-day smoothing in blue")
+write.csv(top5Casesgrouped, file="top5Casesgrouped.csv")
